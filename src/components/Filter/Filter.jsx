@@ -1,6 +1,14 @@
+import { useDispatch } from 'react-redux';
 import { Input } from './Filter.styled';
+import { addFilter } from '../../redux/filterSlice';
 
-export const Filter = ({ onChange, value }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
+
+  const changeFilter = evt => {
+    dispatch(addFilter(evt.target.value));
+  };
+
   return (
     <>
       <p>Find contacrs by name</p>
@@ -8,8 +16,7 @@ export const Filter = ({ onChange, value }) => {
         type="text"
         name="filter"
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-        value={value}
-        onChange={onChange}
+        onChange={changeFilter}
         required
       />
     </>

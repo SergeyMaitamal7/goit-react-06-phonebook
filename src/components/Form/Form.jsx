@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { Form, Label, Input, Button } from './Form.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from '../../redux/contactsSlise';
+import { getContacts } from '../../redux/selectors';
 
-export const FormContacts = ({ submit }) => {
+export const FormContacts = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
 
   const handleChange = evt => {
     const form = evt.currentTarget;
@@ -15,7 +20,13 @@ export const FormContacts = ({ submit }) => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    submit({ name, number });
+    const doubleContact = contacts.find(contact => contact.name === name);
+    if (doubleContact) {
+      alert(`You have already added ${name} to Contact list!!!`);
+      reset();
+      return;
+    }
+    dispatch(addContact(name, number));
     reset();
   };
 
@@ -38,7 +49,7 @@ export const FormContacts = ({ submit }) => {
       </Label>
 
       <Label htmlFor="number">
-        Phone{' '}
+        Phone
         <Input
           type="tel"
           name="number"
